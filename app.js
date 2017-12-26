@@ -8,7 +8,8 @@ var jimp = require('jimp');
 
 var app = express();
 
-var conString = "postgres://axespynegkyzmy:6ba1932eae8eb6d474227cb4bcb026b0e583aa9fae073e35d32b4e39eab22d3f@ec2-54-217-250-0.eu-west-1.compute.amazonaws.com:5432/dc6afggvjq3hl3";
+//var conString = "postgres://axespynegkyzmy:6ba1932eae8eb6d474227cb4bcb026b0e583aa9fae073e35d32b4e39eab22d3f@ec2-54-217-250-0.eu-west-1.compute.amazonaws.com:5432/dc6afggvjq3hl3";
+var conString = "postgres://postgres:root@localhost/coins";
 var dbconnect = new postgres.Client(conString);
 dbconnect.connect();
 
@@ -24,10 +25,10 @@ dbconnect.query(`SELECT * from config`, function(err, result) {
 var objCat = [];
 var query1 = function(admin, callback) {
 	objCat = [];
+	var c = 0;
 	dbconnect.query(`SELECT * from "categories"`, function(err, result) {
 		if(result.rows.length > 0) {
 			console.log("category:"+config.emptyCategories);
-			var c = 0;
 			if(!config.emptyCategories && !admin) {
 				for(var i =0; i < result.rows.length; i += 1) {
 					//console.log("categoryid " + result.rows[i].name);
@@ -44,7 +45,7 @@ var query1 = function(admin, callback) {
 							objCat_temp['id'] = result.rows[i].id;
 							objCat.push(objCat_temp);
 						}
-						if(c === result.rows.length-1) {
+						if(c === result.rows.length) {
 							return callback(JSON.stringify(objCat));
 						}
 					});
