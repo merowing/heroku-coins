@@ -114,9 +114,9 @@ app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
 	query1(0, function(data){
-		//console.log("d:"+data);
+		console.log("d:"+data);
 		items(0, 1, function(data2, pages) {
-			//console.log("json:"+JSON.parse(data2));
+			console.log("json:"+JSON.parse(data2));
 			//data2 = JSON.parse(data2);
 			//var pages = Math.floor(data2.length/8);
 			//console.log(data2.length);
