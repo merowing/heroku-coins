@@ -26,7 +26,7 @@ var query1 = function(admin, callback) {
 	objCat = [];
 	dbconnect.query(`SELECT * from "categories"`, function(err, result) {
 		if(result.rows.length > 0) {
-			console.log("category:"+config.emptyCategories);
+			//console.log("category:"+config.emptyCategories);
 			var c = 0;
 			if(!config.emptyCategories && !admin) {
 				for(var i =0; i < result.rows.length; i += 1) {
@@ -35,10 +35,10 @@ var query1 = function(admin, callback) {
 						//c+=1;
 					dbconnect.query(`SELECT * from items WHERE category='${result.rows[i].id}' AND status=1`, function(err, result2) {
 						c+=1;
-						console.log("L:"+result2.rows.length);
+						//console.log("L:"+result2.rows.length);
 						if(result2.rows.length > 0) {
-							console.log("i: " + i);
-							console.log("categoryid " + result.rows[i].name);
+							//console.log("i: " + i);
+							//console.log("categoryid " + result.rows[i].name);
 							var objCat_temp = {};
 							objCat_temp['name'] = result.rows[i].name;
 							objCat_temp['id'] = result.rows[i].id;
@@ -59,13 +59,13 @@ var query1 = function(admin, callback) {
 				}
 				return callback(JSON.stringify(objCat));
 			}
-			console.log(objCat);
+			//console.log(objCat);
 			//return callback(JSON.stringify(objCat));
 		}else {
 			return callback(null);
 		}
 	});
-	console.log("2");
+	//console.log("2");
 }
 
 
@@ -74,7 +74,7 @@ var storage = multer.diskStorage({
 		callback(null, './public/images');
 	},
 	filename: function(req, file, callback) {
-		console.log("testtest");
+		//console.log("testtest");
 		callback(null, file.originalname);
 	}
 });
@@ -92,11 +92,11 @@ app.use(session({
 }));
 
 var auth = function(req, res, next) {
-	console.log(req.session.user);
+	//console.log(req.session.user);
 	if(req.session.user) {
 		dbconnect.query(`SELECT * from users WHERE name='${req.session.user}'`, function(err, result, fields) {
 				if(req.session && req.session.user === result.rows[0].name && req.session.admin) {
-					console.log("1");
+					//console.log("1");
 					return next();
 				
 			}else {
@@ -121,7 +121,7 @@ app.get('/', function(req, res) {
 			//var pages = Math.floor(data2.length/8);
 			//console.log(data2.length);
 			var phones = (config.phones).toString();
-			console.log("p1:" + typeof(phones));
+			//console.log("p1:" + typeof(phones));
 			phones = phones.split(",");
 
 			if(data === null) data = JSON.stringify([]);
@@ -153,12 +153,12 @@ app.post('/login', function(req, res) {
 
 	dbconnect.query(`SELECT * from users WHERE name='${data.user}'`, function(err, result, fields) {
 		if(result) {
-			//console.log(rows[0]['name']);
+			////console.log(rows[0]['name']);
 			//9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
 			var cryptoPass = crypto.createHash('sha256').update(data.pass.toLowerCase()).digest('hex');
-			console.log(data.pass);
-			console.log(cryptoPass);
-			console.log(result.rows[0]['password']);
+			//console.log(data.pass);
+			//console.log(cryptoPass);
+			//console.log(result.rows[0]['password']);
 			if(data && data.user === result.rows[0]['name'] && cryptoPass === result.rows[0]['password'].toLowerCase()) {
 				req.session.user = data.user;
 				req.session.admin = true;
@@ -182,7 +182,7 @@ app.post('/login', function(req, res) {
 });
 app.get('/logout', function(req, res) {
 	req.session.destroy();
-	res.redirect('https://scoin.herokuapp.com/');
+	res.redirect('scoin.herokuapp.com');
 });
 
 app.get('/admin', auth, function(req, res) {
@@ -190,14 +190,14 @@ app.get('/admin', auth, function(req, res) {
 	var adminItems = config.adminCoinsPerPage;
 	if(!req.params.page) num = 0;
 	else num = (req.params.page - 1) * adminItems;
-	console.log(num);
+	//console.log(num);
 	dbconnect.query(`SELECT * from "items"`, (err, result3) => {
 		if(result3.rows.length) all = result3.rows.length;
-		console.log('all:'+all);
-		console.log("num:" + num);
-		console.log("adminItems:" + adminItems);
+		//console.log('all:'+all);
+		//console.log("num:" + num);
+		//console.log("adminItems:" + adminItems);
 		dbconnect.query(`SELECT * from "items" ORDER BY "id" DESC LIMIT ${adminItems} OFFSET ${num}`, function(err, result) {
-			console.log("result" + result.rows.length);
+			//console.log("result" + result.rows.length);
 			if(result === undefined) result = [];
 			dbconnect.query(`SELECT * from "categories"`, function(err, result2) {
 				for(var i = 0; i < result2.rows.length; i += 1) {
@@ -210,7 +210,7 @@ app.get('/admin', auth, function(req, res) {
 						}
 					}
 				}
-				console.log("res:"+result);
+				//console.log("res:"+result);
 				if(result.rows.length)
 				for(var n = 0; n < result.rows.length; n += 1) {
 					result.rows[n].image = (result.rows[n].image).split(",")[0];
@@ -232,10 +232,10 @@ app.get('/admin/page/:pages?', auth, function(req, res) {
 	var adminItems = config.adminCoinsPerPage;
 	if(!req.params.pages) num = 0;
 	else num = (req.params.pages - 1) * adminItems;
-	console.log(num);
+	//console.log(num);
 	dbconnect.query(`SELECT * from items`, (err, result3) => {
 		if(result3) all = result3.rows.length;
-		console.log(all);
+		//console.log(all);
 		dbconnect.query(`SELECT * from "items" ORDER BY "id" DESC LIMIT ${adminItems} OFFSET ${num}`, function(err, result) {
 			if(result === undefined) result = [];
 			dbconnect.query(`SELECT * from categories`, function(err, result2) {
@@ -263,7 +263,7 @@ app.get('/admin/page/:pages?', auth, function(req, res) {
 });
 app.get('/admin/del', function(req, res) {
 	var arr = req.query.uniq;
-	console.log(arr);
+	//console.log(arr);
 	//console.log(req.query.url);
 	//var url = req.query.url;
 	var uArr = arr.split(',');
@@ -279,7 +279,7 @@ app.get('/admin/del', function(req, res) {
 
 	var sql = `DELETE from items WHERE "uniqId" IN (${arr})`;
 	dbconnect.query(sql, function(err) {
-		console.log(err);
+		//console.log(err);
 		//res.send(`<meta http-equiv="refresh" content="0; url=${url}" />`);
 		res.send('done');
 	});
@@ -300,7 +300,7 @@ app.get('/admin/show', function(req, res) {
 
 	var sql = `UPDATE "items" SET status=${status} WHERE "uniqId" IN (${uniq})`;
 	dbconnect.query(sql, function(err) {
-		console.log(err);
+		//console.log(err);
 		res.send('done');
 	});
 });
@@ -353,7 +353,7 @@ app.get('/admin/add', auth, function(req, res) {
 
 app.get('/admin/info', auth, function(req, res) {
 	dbconnect.query(`SELECT * from config WHERE id=1`, function(err, result) {
-		console.log(result.rows[0].pages);
+		//console.log(result.rows[0].pages);
 		res.render('admin/info', {
 			title: "Панель управления - Настройки",
 			current: result.rows[0].pages,
@@ -376,12 +376,12 @@ var getCategoryId = function(categoryName, callback) {
 function resizeImage(images, callback) {
 
 	var image = images.split(",");
-	console.log(image[0]);
+	//console.log(image[0]);
 	//var ext;
 	for(var i =0; i<image.length; i+=1) {
 		(function(i) {
 		var ext = image[i].split(".");
-		console.log(ext[0]);
+		//console.log(ext[0]);
 		jimp.read("public/images/" + image[i], function(err, img) {
 			if(err) throw err;
 			img.resize(200, jimp.AUTO).write("public/images/thumbs/" + ext[0] + "." + ext[1]);
@@ -404,7 +404,7 @@ app.post('/admin/upload', auth, function(req, res) {
 
 		if(typeof(data.nyear) !== 'undefined') {
 			dbconnect.query(`INSERT INTO years ("year") VALUES ('${data.nyear}')`, function(err) {
-				console.log(err);
+				//console.log(err);
 			});
 		}
 			
@@ -419,8 +419,8 @@ app.post('/admin/upload', auth, function(req, res) {
 			var money_type = data.money_type;
 			var status = data.status;
 			var contract = data.contract || 0;
-console.log("contract"+contract);
-			console.log(data);
+//console.log("contract"+contract);
+			//console.log(data);
 
 			if(typeof(data.edit) !== 'undefined') {
 				uniqId = +data.uniq;
@@ -461,11 +461,11 @@ console.log("contract"+contract);
 					"contract"=${contract} WHERE "uniqId"='${uniqId}'`;
 			}
 
-			console.log(images);
-			console.log(typeof(data.edit));
+			//console.log(images);
+			//console.log(typeof(data.edit));
 			if(typeof(data.edit) !== 'undefined') {
 				dbconnect.query(uSql, function(err) {
-					console.log(err);
+					//console.log(err);
 				});
 			}else {
 				dbconnect.query(`INSERT INTO items ("name","year","price","description","image","uniqId","category","money_type","status","contract") VALUES ('${name}','${year}','${price}','${description}','${images}','${uniqId}','${category}','${money_type}','${status}', '${contract}') RETURNING *`, function(err) {
@@ -478,15 +478,15 @@ console.log("contract"+contract);
 
 			if(typeof(data.category2) !== 'undefined') {
 				dbconnect.query(`INSERT INTO "categories" ("name") VALUES ('${data.category2}') RETURNING *`, function(err) {
-					console.log(err);
+					//console.log(err);
 				});
 
 				var datac = data.category2;
 				getCategoryId(datac, function(id) {
 					categoryId = id;
-					console.log(uniqId);
+					//console.log(uniqId);
 					dbconnect.query(`UPDATE items SET "category"='${categoryId}' WHERE "uniqId"='${uniqId}'`, function(err) {
-						console.log(err);
+						//console.log(err);
 					});
 				});
 			}
@@ -514,7 +514,7 @@ console.log("contract"+contract);
 
 var items = function(id, page, callback) {
 	var start = (page - 1) * config.coinsPerPage;
-	console.log("start"+start);
+	//console.log("start"+start);
 	var sql = "";
 	if(id === 0) {
 		sql = `SELECT * from "items"`;
@@ -533,7 +533,7 @@ dbconnect.query(sql, function(err, result2) {
 	dbconnect.query(sql, function(err, result) {
 		var objCat = [];
 //console.log("rows length:" + rows[0].itemsCount);
-		console.log("id:"+id);
+		//console.log("id:"+id);
 		//console.log(result);
 		if(result) {
 			for(var i =0; i < result.rows.length; i += 1) {
@@ -562,13 +562,13 @@ dbconnect.query(sql, function(err, result2) {
 }
 
 app.get('/category/:id?/:page?', function(req, res) {
-	console.log(req.params.id);
+	//console.log(req.params.id);
 	var id = req.params.id;
 	var page = req.params.page || 1;
-	console.log("page" + page);
+	//console.log("page" + page);
 	if(id === "all") id = 0;
 query1(0, function(data) {
-	console.log("id - "+id);
+	//console.log("id - "+id);
 		items(id, page, function(data2, pages) {
 //console.log(JSON.parse(data2));
 			if(data === null) data = JSON.stringify([]);
@@ -625,7 +625,7 @@ app.get('/admin/edit/:coin?', auth, function(req, res) {
 });
 app.post('/admin/edit', auth, function(req, res) {
 	var coinId = req.body.coin;
-	console.log("c:"+coinId);
+	//console.log("c:"+coinId);
 	dbconnect.query(`SELECT * from "items" WHERE "uniqId"='${coinId}'`, function(err, result) {
 		res.send(JSON.stringify(result.rows[0]));
 	});
@@ -653,12 +653,12 @@ app.post('/admin/config', auth, function(req, res) {
 	if(phones.lenght > 1)
 		phones = data.phones.join(",");
 	dbconnect.query(`UPDATE config SET "pages"='${data.page}', "phones"='${phones}', "admin"='${adminItems}', "cancelDelete"='${cancelDelete}', "emptyCategories"='${emptyCategories}' WHERE id=1`, function(err) {
-		console.log(err);
+		//console.log(err);
 
 		if(data.newpass !== "") {
 			var pass = crypto.createHash('sha256').update(data.newpass).digest('hex')
 			dbconnect.query(`UPDATE users SET password='${pass}' WHERE name='${req.session.user}'`, function(err) {
-				console.log(err);
+				//console.log(err);
 			});
 		}
 
@@ -667,7 +667,7 @@ app.post('/admin/config', auth, function(req, res) {
 		config.adminCoinsPerPage = data.admin;
 		config.emptyCategories = data.emptyCategories;
 
-		console.log("p:" + data.phones);
+		//console.log("p:" + data.phones);
 		res.send(`<meta http-equiv="refresh" content="0; url=/admin/info" />`);
 	});
 	/*dbconnect.query(`SELECT * from config`, function(err, rows) {
