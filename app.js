@@ -8,7 +8,7 @@ var jimp = require('jimp');
 
 var app = express();
 
-var conString = "postgres://postgres:root@localhost:5432/coins";
+var conString = "postgres://axespynegkyzmy:6ba1932eae8eb6d474227cb4bcb026b0e583aa9fae073e35d32b4e39eab22d3f@ec2-54-217-250-0.eu-west-1.compute.amazonaws.com:5432/dc6afggvjq3hl3";
 var dbconnect = new postgres.Client(conString);
 dbconnect.connect();
 
