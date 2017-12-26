@@ -19,6 +19,7 @@ dbconnect.query(`SELECT * from config`, function(err, result) {
 	config.adminCoinsPerPage = result.rows[0].admin;
 	config.emptyCategories = result.rows[0].emptyCategories;
 });
+await dbconnect.end();
 //var coinsPerPage = 8;
 
 var objCat = [];
@@ -47,6 +48,7 @@ var query1 = function(admin, callback) {
 						if(c === result.rows.length-1) {
 							return callback(JSON.stringify(objCat));
 						}
+						dbconnect.end();
 					});
 					})(i);
 				}
@@ -57,11 +59,13 @@ var query1 = function(admin, callback) {
 					objCat_temp['id'] = result.rows[i].id;
 					objCat.push(objCat_temp);
 				}
+				dbconnect.end();
 				return callback(JSON.stringify(objCat));
 			}
 			//console.log(objCat);
 			//return callback(JSON.stringify(objCat));
 		}else {
+			dbconnect.end();
 			return callback(null);
 		}
 	});
