@@ -19,7 +19,7 @@ dbconnect.query(`SELECT * from config`, function(err, result) {
 	config.adminCoinsPerPage = result.rows[0].admin;
 	config.emptyCategories = result.rows[0].emptyCategories;
 });
-await dbconnect.end();
+dbconnect.end();
 //var coinsPerPage = 8;
 
 var objCat = [];
