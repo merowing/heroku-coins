@@ -186,7 +186,7 @@ app.post('/login', function(req, res) {
 });
 app.get('/logout', function(req, res) {
 	req.session.destroy();
-	res.redirect('scoin.herokuapp.com');
+	res.redirect('https://scoin.herokuapp.com/');
 });
 
 app.get('/admin', auth, function(req, res) {
