@@ -469,10 +469,11 @@ app.post('/admin/upload', auth, function(req, res) {
 				});
 			}else {
 				dbconnect.query(`INSERT INTO items ("name","year","price","description","image","uniqId","category","money_type","status","contract") VALUES ('${name}','${year}','${price}','${description}','${images}','${uniqId}','${category}','${money_type}','${status}', '${contract}') RETURNING *`, function(err) {
-					if(err)
-						//console.log(err);
-					else
-						//console.log('added new items ' + name);
+					if(err) {
+						console.log(err);
+					}else {
+						console.log('added new items ' + name);
+					}
 				});
 			}
 
