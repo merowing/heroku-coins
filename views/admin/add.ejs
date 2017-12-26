@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<% include header.ejs %>
+</head>
+<body>
+	<% include menu.ejs %>
+<div id="right">
+	<div id="add-form">
+<form action="/admin/upload" method="POST" enctype="multipart/form-data">
+	<div id="leftForm">
+		<div>
+			<label for="name">Название:</label>
+			<input id="name" name="name" type="text" class="full">
+		</div>
+		<div>
+			<div style="float: left;">
+
+			<% if(typeof(years) !== 'undefined' && years.length <= 0) {%>
+			<div>
+				<label for="gyear">Год выпуска:</label>
+				<input type="radio" name="group1" disabled="disabled">
+				<select id="gyear" name="gyear" disabled="disabled">
+					<option>Пусто</option>
+				</select>
+			</div>
+			<div>
+			<input type="radio" name="group1" checked="checked">
+			<input type="text" name="nyear" id="nyear">
+			</div>
+			<% }else { %>
+			<div>
+				<label for="gyear">Год выпуска:</label>
+				<input type="radio" name="group1" checked="checked">
+				<select id="gyear" name="gyear">
+					<% if(typeof(years) !== 'undefined' && years.length > 0) {%>
+					<% for(var y = 0; y < years.length; y += 1) {%>
+						<option value="<%=years[y].year%>"><%=years[y].year%></option>
+					<% }}%>
+				</select>
+			</div>
+			<div>
+			<input type="radio" name="group1">
+			<input type="text" name="nyear" disabled="disabled" id="nyear">
+			</div>
+			<% } %>
+		</div>
+		<div style="float: right;">
+			<div>
+				<label>Категория:</label>
+				<input type="radio" value="1" name="group2" checked="checked">
+				<select id="category1" name="category1">
+					<option value="0">Общая</option>
+					<% if(typeof(categories) !== 'undefined') {%>
+					<% if(categories.length > 0) {%>
+					<% for(var c = 0; c < categories.length; c += 1) {%>
+						<option value="<%=categories[c].id%>"><%=categories[c].name%></option>
+					<% }}}%>
+				</select>
+
+			</div>
+			<div>
+				<input type="radio" value="2" name="group2">
+				<input type="text" name="category2" disabled="disabled" id="category2">
+			</div>
+		</div>
+			<!--<div id="create">Добавить новую</div>-->
+		</div>
+
+		<div>
+			<label for="name">Описание:</label>
+			<textarea id="description" class="full" name="description"></textarea>
+		</div>
+		<div>
+			<lable id="lstatus" for="status">Показывать:</lable>
+			<select id="status" name="status">
+				<option value="1" selected="selected">Да</option>
+				<option value="0">Нет</option>
+			</select>
+			<span id="mstatus">Активный</span>
+		</div>
+		<input type="submit" id="send" value="Добавить">
+	</div>
+	<div id="rightForm">
+		<div>
+			<label for="price">Цена:</label>
+			<input id="price" name="price" type="text">
+			<select id="money_type" name="money_type">
+				<option value="1">₽</option>
+				<option value="2">$</option>
+				<option value="3">€</option>
+			</select>
+			<div id="contract_price">
+				<input type="checkbox" id="contract" name="contract" value="0">
+				<label for=contract>Договорная</label>
+			</div>
+		</div>
+		<div>
+			<div id="fileUpload">
+				<label for="images">Фото:</label>
+				<input type="file" id="img" name="images" accept="image/jpeg, image/png" multiple="">
+			</div>
+			<div id="imgPreview"></div>
+		</div>
+	</div>
+</form>
+</div>
+
+<!--<div id="new-category">
+	<div>Новая категория</div>
+	<div id="close">Закрыть</div>
+	<div class="blockadd">
+		<input type="text" id="newcategory">
+		<button id="addnewcategory">Добавить</button>
+	</div>
+</div>
+<div id="back"></div>-->
+
+<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>-->
+<script>
+      /*$(document).ready(function(){
+        var user,pass;
+        $("#send").click(function(){
+          name=$("#name").val();
+          $.post("http://localhost:3000/admin/upload",{user: name}, function(data){
+            if(data==='done')
+              {
+                alert("login success");
+              }
+          });
+        });
+      });*/
+    </script>
+<script>
+	(function(){
+		var send = document.getElementById("send");
+		var imgPreview = document.getElementById("imgPreview");
+		var fileUpload = document.getElementById("img");
+		function preview(input) {
+		  if (input.files && input.files[0]) {
+		  	var n = 0;
+		  	for(var i = 0; i < input.files.length; i += 1) {
+		  		(function(i) {
+			    var reader = new FileReader();
+
+			    reader.onload = function(e) {
+			      imgPreview.innerHTML += `<img src="${e.target.result}">`;
+			      n++;
+			      if(n === input.files.length) {
+			      	send.disabled = false;
+			      }
+			    }
+
+			    reader.readAsDataURL(input.files[i]);
+			})(i);
+			}
+		  }
+		}
+		fileUpload.onchange = function() {
+			imgPreview.innerHTML = "";
+			send.disabled = true;
+			preview(this);
+		}
+
+		//var create = document.getElementById("create");
+		//var show = document.getElementById("new-category");
+		//var close = document.getElementById("close");
+		//var bg = document.getElementById("back");
+		/*create.onclick = function() {
+			show.style.display = "block";
+			bg.style.display = "block";
+		}
+		close.onclick = function() {
+			show.removeAttribute("style");
+			bg.removeAttribute("style");
+		}*/
+
+		//var add = document.getElementById("addnewcategory");
+		//var category = document.getElementById("category");
+		//var newcategory = document.getElementById("newcategory");
+		/*addnewcategory.onclick = function() {
+			//alert(newcategory.value);
+			var elem = document.createElement("option");
+			elem.innerHTML = newcategory.value;
+			category.appendChild(elem);
+
+			show.removeAttribute("style");
+			bg.removeAttribute("style");
+			category.selectedIndex = category.length - 1;
+			newcategory.innerHTML = "";
+		}*/
+
+		var year = document.getElementById("nyear");
+		var gyear = document.getElementById("gyear");
+		var category1 = document.getElementById("category1");
+		var category2 = document.getElementById("category2");
+		var radio = document.querySelectorAll("input[type=radio]");
+
+		radio[0].onclick = function() {
+			year.setAttribute("disabled","disabled");
+			gyear.removeAttribute("disabled");
+		}
+		radio[1].onclick = function() {
+			year.removeAttribute("disabled");
+			year.focus();
+			gyear.setAttribute("disabled","disabled");
+		}
+
+		radio[2].onclick = function() {
+			category2.setAttribute("disabled","disabled");
+			category1.removeAttribute("disabled");
+		}
+		radio[3].onclick = function() {
+			category2.removeAttribute("disabled");
+			category2.focus();
+			category1.setAttribute("disabled","disabled");
+		}
+
+		year.onkeypress = function(e) {
+			var e = e || event;
+
+			if((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode === 44 || e.keyCode === 45 || e.keyCode === 59) {
+				return true;
+			}else {
+				return false;
+			}
+		}
+
+		/*var send = document.getElementById("send");
+		var form = document.getElementsByTagName("form");
+		var data = {};
+		send.onclick = function() {
+			//alert(form[0].length);
+			    
+			for(var i = 0; i < form[0].length - 1; i += 1) {
+
+				if(form[0][i].name.indexOf("category") !== -1 && !form[0][i].disabled && form[0][i].type !== "radio") {
+					data["category"] = form[0][i].value;
+					continue;
+				}
+				if(form[0][i].name.indexOf("year") !== -1 && !form[0][i].disabled && form[0][i].type !== "radio") {
+					data["year"] = form[0][i].value;
+					continue;
+				}*/
+				/*if(form[0][i].type === "radio" && form[0][i].checked) {
+					if(form[0][i].name.indexOf("year")) {
+						alert(form[0][i].name.indexOf("year"));
+						data["year"] = form[0][i+1].value;
+					}
+					if(form[0][i].name.indexOf("category")) {
+						data["category"] = form[0][i+1].value;
+					}
+					i+=1;
+					continue;
+				}else {*/
+			/*		if((form[0][i].type !== "radio" && !form[0][i].disabled)) {
+						data[form[0][i].name] = form[0][i].value;
+					}
+				//}
+			}*/
+			//console.log(data);
+			//check(data)
+			//return false;
+
+			/*var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function()
+        {
+            if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            {
+                alert(xmlHttp.responseText);
+            }
+        }
+        xmlHttp.open("post", "/admin/upload", false); 
+        xmlHttp.setRequestHeader("Content-Type", "multipart/form-data");
+        xmlHttp.send(JSON.stringify(data)); 
+
+        return false;*/
+		//}
+
+		/*
+		function check(data) {
+			var test = true;
+			for(var key in data) {
+				if(data[key] === "") {
+					document.getElementById(key).style.borderColor = "red";
+					test = false;
+				}
+			}
+			return test;
+		}*/
+
+		var status = document.getElementById("status");
+		var mstatus = document.getElementById("mstatus");
+		var statusArr = ["Скрытый","Активный"];
+		status.onchange = function() {
+			mstatus.innerHTML = statusArr[this.value];
+			if(+this.value === 0) {
+				mstatus.setAttribute("class","hidden");
+			}else {
+				mstatus.removeAttribute("class");
+			}
+		}
+
+
+		var coinUniq = window.location.href.split("/").pop();
+		function getEditData() {
+			var xhr = new XMLHttpRequest();
+				xhr.open('POST', `/admin/edit`, true);
+				var params = "coin=" + coinUniq;
+				xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				xhr.onload = function() {
+				    if (xhr.status === 200) {
+				    	
+				    	var json = JSON.parse(xhr.responseText);
+
+				    	var form = document.getElementsByTagName("form");
+				    	//form[0].setAttribute("action","/admin/update");
+				    	var input = document.createElement("input");
+				    	input.type = "hidden";
+				    	input.value = "edit";
+				    	input.name = "edit";
+				    	form[0].appendChild(input);
+
+				    	var input1 = document.createElement("input");
+				    	input1.type = "hidden";
+				    	input1.value = coinUniq;
+				    	input1.name = "uniq";
+				    	form[0].appendChild(input1);
+
+				    	send.value = "Изменить";
+				    	var name = document.getElementById("name");
+				    	var price = document.getElementById("price");
+				    	var money_type = document.getElementById("money_type");
+				    	var year = document.getElementById("gyear");
+				    	var category = document.getElementById("category1");
+				    	var description = document.getElementById("description");
+				    	var status = document.getElementById("status");
+				    	var contract = document.getElementById("contract");
+
+				    	name.value = json.name;
+				    	price.value = json.price;
+				    	money_type.selectedIndex = json.money_type - 1;
+
+				    	if(+json.contract) {
+				    		contract.setAttribute("checked", "checked");
+				    		contract.value = "1";
+				    		
+							price.disabled = true;
+							price.value = "";
+				    	}
+
+				    	for(var i = 0; i < year.length; i += 1) {
+				    		if(year[i].value === json.year) {
+				    			year.selectedIndex = i;
+				    			break;
+				    		}
+				    	}
+
+				    	for(var i = 0; i < category.length; i += 1) {
+				    		if(category[i].value === json.category) {
+				    			category.selectedIndex = i;
+				    			break;
+				    		}
+				    	}
+
+				    	description.innerText = json.description;
+				    	for(var i = 0; i < status.length; i += 1) {
+				    		if(+status[i].value === json.status) {
+				    			status.selectedIndex = i;
+				    			break;
+				    		}
+				    	}
+				    	mstatus.innerHTML = statusArr[status.value];
+				    	if(+status.value === 0) {
+							mstatus.setAttribute("class","hidden");
+						}else {
+							mstatus.removeAttribute("class");
+						}
+
+						var images = json.image.split(",");
+						for(var i = 0; i < images.length; i += 1) {
+							imgPreview.innerHTML += `<img src="/images/thumbs/${images[i]}">`;
+						}
+
+
+				    }else {
+				    	alert("Error 111");
+				    }
+				};
+				xhr.send(params);
+		}
+		if(!isNaN(coinUniq)) {
+			getEditData();
+		}
+
+		var contract = document.getElementById("contract");
+		contract.onchange = function() {
+			if(!+this.value) {
+				//this.setAttribute("value","1");
+				this.value = "1";
+				price.disabled = true;
+			}else {
+				//this.setAttribute("value","0");
+				this.value = "0";
+				price.disabled = false;
+			}
+			//alert(this.value);
+		}
+
+	})();
+</script>
+	</div>
+</body>
+</html>

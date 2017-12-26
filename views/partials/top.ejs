@@ -1,0 +1,49 @@
+<div class="top-menu">
+					<div>
+						<% if(phones.length > 2) {%>
+							<ul>
+								<% for(var i = 0; i < 2; i += 1) { %>
+									<li><%=phones[i]%></li>
+								<% } %>
+							</ul>
+							<ul>
+								<% for(var i = 2; i < phones.length; i += 1) { %>
+									<li><%=phones[i]%></li>
+								<% } %>
+							</ul>
+						<% }else { %>
+						<ul>
+							<% for(var i = 0; i < phones.length; i += 1) { %>
+								<li><%=phones[i]%></li>
+							<% } %>
+						</ul>
+						<% } %>
+						<nav>
+							<ul>
+								<li><a href="/">Главная</a></li>
+								<li><a href="/delivery">Доставка</a></li>
+								<li><a href="/contacts">Контакты</a></li>
+							</ul>
+						</nav>
+					</div>
+					<div id="login">
+					<% if(typeof(session) === undefined || !session) { %>
+						<a href="/login"><span>Вход</span></a>
+					<% }else { %>
+						<a href="/login"><span class="logout">Панель управления</span></a>
+					<% } %>
+	
+					</div>
+				</div>
+				
+				<div id="pages">
+					<ul>
+					<% if(typeof(pages) !== "undefined") { %>
+						<% if(pages > 1) { %>
+						<% for(var i = 0; i < pages; i+=1) { %>
+							<li><%=(i+1)%><a href="/category/all/<%=(i+1)%>"></a></li>
+						<% }} %>
+						
+				<% } %>
+					</ul>
+				</div>

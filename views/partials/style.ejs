@@ -1,0 +1,338 @@
+html, body {
+			margin:0;
+			padding:0;
+			height:100%;
+		}
+		body {
+			color:black;
+		}
+		ul {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+		.wrapper {
+			max-width:1200px;
+			margin:0 auto;
+			height:100%;
+			//display: flex;
+			//flex-direction: column;
+		}
+		div.wrapper > div {
+		}
+		#left {
+			width:260px;
+			float:left;
+			position: relative;
+		}
+		#right {
+			float:none;
+			box-sizing: border-box;
+			overflow: hidden;
+			position: relative;
+		}
+
+		/* --- top */
+		#top {
+			//height: 120px;
+			margin:0;
+			border-bottom: 1px solid lightgray;
+		}
+		/* --- content */
+		#content {
+			margin: 20px 0;
+		}
+		#content > div {
+			height: 100%;
+		}
+		/* --- navigation */
+		nav {
+			font:18px normal Georgia;
+		}
+		nav a {
+			text-decoration: none;
+			color:black;
+		}
+		nav a:hover {
+			text-decoration: underline;
+		}
+		.left-menu-wrap {
+			margin: 0px auto;
+			width:200px;
+			font:18px normal Georgia;
+		}
+		#coins-menu ul {
+			position: absolute;
+		}
+		#coins-menu ul > li {
+			padding: 6px 0;
+		}
+		#coins-menu > ul ul {
+			margin: 10px 0;
+
+			font-size:18px;
+		}
+		#coins-menu > ul ul li {
+			padding-left: 16px;
+			font-style:italic;
+		}
+		#coins-menu a {
+			text-decoration: none;
+			color: black;
+			display: block;
+		}
+		#coins-menu a:hover {
+			cursor: pointer;
+			text-decoration: underline;
+		}
+		.main-category {
+			font:22px bold Georgia;
+			margin-bottom:10px;
+			padding: 0;
+		}
+
+		/* --- right block */
+		.top-menu div {
+			display: table-cell;
+			font-size: 18px;
+			vertical-align: middle;
+			padding-left: 30px;
+		}
+		.top-menu {
+			width: 100%;
+			vertical-align: middle;
+			height: 100%;
+			display: table;
+
+			padding: 20px 0;
+		}
+		.top-menu div ul {
+			font:30px normal Georgia;
+			vertical-align: middle;
+			display: inline-block;
+			margin-right: 20px;
+		}
+		.top-menu div nav {
+			display: inline-block;
+			margin-left: 40px;
+		}
+		.top-menu nav ul {
+			vertical-align: middle;
+			line-height: 30px;
+			font-size:0;
+		}
+		.top-menu nav li {
+			font-size: 18px;
+		}
+		#login {
+			padding-right: 30px;
+			text-align: right;
+
+		}
+		#login span {
+			border:1px solid lightgray;
+			padding: 6px 12px;
+			border-radius: 4px;
+		}
+		#login span:hover {
+			border:1px solid gray;
+			cursor:pointer;
+		}
+		#login a {
+			text-decoration: none;
+			color:black;
+		}
+
+		/* --- right block */
+		#right {
+			//display: flex;
+			//font-size:0;
+			margin-left:260px;
+		}
+		#right > div {
+			width:200px;
+			height:300px;
+			border:1px solid lightgray;
+			display: inline-block;
+			//line-height: 160px;
+			overflow: hidden;
+			box-sizing: border-box;
+			margin:10px;
+			position: relative;
+			text-align: center;
+			//box-shadow: 0 0 10px gray;
+		}
+		#right > div:hover {
+			border:1px solid orangered;
+			cursor: pointer;
+			//box-shadow: 0 0 10px black;
+		}
+		#right > div:hover div.buy span {
+			background-color: orangered;
+			color:white;
+			border:1px solid white;
+			border-radius: 3px;
+		}
+		#right div img {
+			//width:100%;
+			height:100%;
+			//vertical-align: middle;
+			//border-bottom: 1px solid gray;
+		}
+		#right div.imageBlock {
+			height: 150px;
+			//height:100%;
+			border-bottom: 1px solid lightgray;
+		}
+
+		#right div.price {
+			//background-color: white;
+			//line-height: normal;
+			//font:20px bold Georgia, Verdana;
+			//padding:10px;
+			//position: relative;
+			//z-index: 100;
+			//margin-top: -20px;
+			//display: inline-block;
+		}
+		#right div.buy {
+			font:13px normal Georgia, Verdana;
+			//background-color: white;
+			margin:10px;
+			position: absolute;
+			left:0;
+			right: 0;
+			bottom: 0;
+		}
+		#right div.buy span {
+			display: inline-block;
+			padding:10px 16px;
+			//border:1px solid lightgray;
+			//border-radius: 2px;
+		}
+		#right div a {
+			position: absolute;
+			left:0;
+			right: 0;
+			bottom: 0;
+			top: 0;
+		}
+		.val {
+			font-weight: bold;
+			//padding-right: 4px;
+			font-size: 14px;
+		}
+		.price {
+			list-style: none;
+			font:24px bold Georgia, Verdana;
+		}
+		.price > li {
+			display: inline-block;
+		}
+		.old-price {
+			text-decoration: line-through;
+			font-size: 12px;
+			display: block;
+		}
+		.new-price {
+			color:green;
+		}
+		.discount {
+			font:12px italic Consolas;
+		}
+
+		.item-info {
+			font:18px normal Verdana;
+			padding: 10px 0;
+		}
+		.item-info .year {
+			font-size:14px;
+		}
+
+
+		#coins-menu ul.scroll {
+			position: fixed;
+			top:20px;
+		}
+		#background {
+			position: absolute;
+			width:100%;
+			height: 100%;
+			background-color: black;
+			opacity: 0.8;
+			z-index:900;
+			top:0;
+			display: none;
+		}
+		#login span.logout {
+			background-color: darkred;
+			color:white;
+			border:1px solid darkred;
+		}
+		#pages {
+			position: relative;
+			//border-bottom: 1px solid lightgray;
+			//margin:10px 0;
+			padding-bottom: 16px;
+		}
+		#pages ul {
+			list-style: none;
+			font-size: 0;
+			text-align: right;
+			padding-right: 30px;
+		}
+		#pages ul li {
+			display: inline-block;
+			padding: 4px 10px;
+			border: 1px solid lightgray;
+			font: 20px normal Verdana;
+			margin-left: 10px;
+			cursor: pointer;
+			position: relative;
+		}
+		#pages ul li.active {
+			cursor: default;
+		}
+		#pages ul li:hover,
+		#pages ul li.active {
+			background-color: orangered;
+			color:white;
+			border:1px solid orangered;
+		}
+		#pages a {
+			text-decoration: none;
+			color:black;
+			position: absolute;
+			top:0;
+			left:0;
+			right: 0;
+			bottom: 0;
+		}
+		#coinBlock {
+			position: absolute;
+			top:50%;
+			left:50%;
+			margin-left: -300px;
+			margin-top:-170px;
+			width:600px;
+			height:340px;
+			background-color: white;
+			z-index: 901;
+			display: none;
+		}
+		#coinBlock .close {
+			position: absolute;
+			right:0;
+			top:-40px;
+			font:16px normal Verdana;
+			color:black;
+			background-color:white;
+			padding: 0 10px;
+			line-height:40px;
+		}
+		#coinBlock #bgimg {
+			background:url('/images/1370177832931_bulletin.jpg') 0 0 no-repeat;
+			//height:100%;
+			width:200px;
+			height:200px;
+		}

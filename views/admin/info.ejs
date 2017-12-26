@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<% include header.ejs %>
+	<style>
+		#options label,
+		#options select {
+			display: inline-block;
+			vertical-align: middle;
+			padding: 0 10px 0 0;
+			margin: 0;
+		}
+		#options input[type="submit"] {
+			margin-top:20px;
+			display: block;
+		}
+		#options > div {
+			display: inline-block;
+			width:40%;
+			vertical-align: top;
+		}
+		#options #phonesSelect {
+			width:100%;
+			height: 100px;
+			margin:10px 0;
+			font-size:18px;
+			padding: 0;
+		}
+		#main-options div,
+		#other-options div {
+			margin-bottom: 20px;
+		}
+		#main-options .phones label {
+			display: block;
+			margin-bottom: 4px;
+		}
+		button#delPhone {
+			float:right;
+		}
+	</style>
+</head>
+<body>
+	<% include menu.ejs %>
+<div id="right">
+	<form action="/admin/config" method="post" id="options">
+		<div id="other-options">
+			<div>
+			<label>Количество монет на странице</label>
+			<select name="page">
+				<% items = [4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]; %>
+				<% for(var i =0; i < items.length; i += 1) {%>
+					<% if(current === items[i]) { %>
+						<option value="<%=items[i]%>" selected><%=items[i]%></option>
+					<% }else {%>
+						<option value="<%= items[i]%> "><%=items[i] %></option>
+					<% } %>
+				<% } %>
+			</select>
+			</div>
+			<div>
+			<label>Количество монет в панели управления</label>
+			<select name="admin">
+				<% for(var i =0; i < items.length; i += 1) {%>
+					<% if(adminItems === items[i]) { %>
+						<option value="<%=items[i]%>" selected><%=items[i]%></option>
+					<% }else {%>
+						<option value="<%= items[i]%> "><%=items[i] %></option>
+					<% } %>
+				<% } %>
+			</select>
+			</div>
+			<div>
+				<% var cSelected = ""; if(+cancel) cSelected = " checked"%>
+				<label for="cancelDelete">Подтверждать удаление товара</label>
+				<input type="checkbox" name="cancelDelete" id="cancelDelete" value="1" <%=cSelected%>>
+			</div>
+			<div>
+				<% var eSelected = ""; if(+empty) eSelected = " checked"%>
+				<label for=emptyCategories>Показывать пустые категории</label>
+				<input type="checkbox" name="emptyCategories" id="emptyCategories" value="1" <%=eSelected%>>
+			</div>
+		</div>
+		<div id="main-options">
+			<div>
+				<label for="newpass">Новый пароль</label>
+				<input type="text" id="newpass" name="newpass">
+			</div>
+			<div class="phones">
+				<label for="phone">Телефоны</label>
+				<select multiple="multiple" id="phonesSelect" name="phones">
+					<% phones = phones.split(","); %>
+					<% for(var i = 0; i < phones.length; i += 1) {%>
+						<option value="<%=phones[i]%>"><%=phones[i]%></option>
+					<% } %>
+				</select>
+				<input type="text" id="phone">
+				<button id="addPhone">Добавить</button>
+				<button id="delPhone">Удалить</button>
+			</div>
+		</div>
+		<input type="submit" value="Сохранить" id="sendOptions">
+	</form>
+</div>
+<script>
+	(function() {
+		var select = document.getElementById("phonesSelect");
+		var addPhone = document.getElementById("addPhone");
+		var delPhone = document.getElementById("delPhone");
+		var phoneText = document.getElementById("phone");
+
+		var sendOptions = document.getElementById("sendOptions");
+		addPhone.onclick = function(e) {
+			e.preventDefault();
+			var elem = document.createElement("option");
+			elem.innerText = phoneText.value;
+			elem.value = phoneText.value;
+			select.appendChild(elem);
+			//alert(phoneText.value);
+			phoneText.value = "";
+			e.stopPropagation();
+		}
+		delPhone.onclick = function(e) {
+			e.preventDefault();
+			var option = select.getElementsByTagName("option");
+			
+			for(var i = 0; i < select.options.length; i+= 1) {
+				if(select.options[i].selected) {
+					select.removeChild(option[i]);
+					i -= 1;
+				}
+			}
+			//select.removeChild(option[select.selectedIndex]);
+
+			e.stopPropagation();	
+		}
+
+		sendOptions.onclick = function() {
+			for(var i = 0; i < select.options.length; i+= 1) {
+				select.options[i].selected = true;
+			}
+		}
+
+	})();
+	</script>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!--<div>items</div>-->
+<div class="home-top">
+	<ul id="admin-panel">
+		<li id="home-add"><button>Добавить</button></li>
+		<li id="home-cancel"><button>Отменить выделение</button></li>
+		<li id="home-edit"><button>Редактировать</button></li>
+		<!--<li id="home-change"><button>Изменить категорию</button></li>-->
+		<li id="home-hide"><button>Скрыть</button></li>
+		<li id="home-del"><button>Удалить</button></li>
+	</ul>
+	<div id="admin-pages">
+		<% var items = JSON.parse(itemsData); var mArr = ["₽", "$", "€"] %>
+		<% var status = ["Скрытый", "Активный"]; %>
+		<% var pages = Math.ceil(allPages/aItems); %>
+		<% if(pages > 0) { %>
+			<span>Страницы</span>
+		<% } %>
+		<ul>
+		<% for(var i =0; i < pages; i+= 1) {%>
+			<li><a href="/admin/page/<%=(i+1)%>"><%=(i+1)%></a></li>
+		<% } %>
+	</ul>
+	</div>
+</div>
+<div id="home-items">
+	<% if(items.length > 0) { %>
+	<% for(var i =0, j=(allPages - nums)-1; i < items.length; i+= 1, j-= 1) {%>
+	<% var classStatus = ""; if(+items[i].status === 0) classStatus = "hidden"; %>
+	<div class="admin-item">
+		<ul class="<%=classStatus%>">
+			<li class="item-number"><span><%=(j+1)%></span></li>
+			<li class="item-checkbox"><input type="checkbox"></li>
+			<li class="item-image"><img src="/images/thumbs/<%=items[i].image%>"></li>
+			<li class="item-uniqId"><%=items[i].uniqId%></li>
+			<li class="item-name"><span><%=items[i].name%></span></li>
+			<li class="item-category"><span><%=items[i].category%></span></li>
+			<li class="item-price">
+				<% if(!+items[i].contract) {%>
+					<span><%=mArr[items[i].money_type-1]%><%=items[i].price%></span>
+				<%}else {%>
+					<span>Договорная</span>
+				<%}%>
+			</li>
+			<li class="item-status" stts="<%=items[i].status%>"><span class="<%=classStatus%>"><%=status[items[i].status]%></span></li>
+		</ul>
+	</div>
+<% }}else { %>
+<p style="margin-left:40px;">Вы еще не добавили монеты!</p>
+<% } %>
+
+	<!--<div class="admin-item">
+		<ul>
+			<li class="item-number">1</li>
+			<li class="item-checkbox"><input type="checkbox"></li>
+			<li><img src="/images/thumbs/2ce7dbd5113f97a7a6b640460877f5447c8ec233.jpg"></li>
+			<li class="item-uniqId">uniqId</li>
+			<li class="item-name">name</li>
+			<li class="item-category">category</li>
+			<li class="item-price">price</li>
+			<li class="item-date">date added</li>
+		</ul>
+	</div>
+	<div class="admin-item">
+		<ul>
+			<li class="item-number">2</li>
+			<li class="item-checkbox"><input type="checkbox"></li>
+			<li><img src="/images/thumbs/2-rub-2011-goda-mmd.jpg"></li>
+			<li class="item-uniqId">uniqId</li>
+			<li class="item-name">name</li>
+			<li class="item-category">category</li>
+			<li class="item-price">price</li>
+			<li class="item-date">date added</li>
+		</ul>
+	</div>-->
+</div>
+<script>
+	(function() {
+
+		// load config
+		var dataConf;
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', `/admin/config`);
+		xhr.onload = function() {
+		    if (xhr.status === 200) {
+		    	dataConf = JSON.parse(xhr.responseText);
+		    }else {
+		    	alert("Error 222");
+		    }
+		};
+		xhr.send();
+
+		var item = document.querySelectorAll('.admin-item');
+		var itemCheck = document.getElementsByTagName("input");
+
+		var adminPanel = document.getElementById("admin-panel");
+		var adminPanelButtons = adminPanel.getElementsByTagName("li");
+		var itemsArr = [];
+		var uniqId = document.querySelectorAll('.item-uniqId');
+
+		var edit = document.getElementById("home-edit");
+		var cancel = document.getElementById("home-cancel");
+		var del = document.getElementById("home-del");
+		var hide = document.getElementById("home-hide");
+
+		var pageBlock = document.getElementById("admin-pages");
+		var page = pageBlock.getElementsByTagName("li");
+		var pageNum = +window.location.href.split("/").pop();
+		
+		var aLen = pageBlock.getElementsByTagName("li").length;
+		if(isNaN(pageNum) && aLen > 0) {
+			page[0].style.backgroundColor = "red";
+			page[0].getElementsByTagName("a")[0].style.color = "white";
+			page[0].getElementsByTagName("a")[0].style.borderColor = "red";
+		}
+
+		for(var i =0;i<page.length;i+=1) {
+			if((i+1) === pageNum) {
+				page[i].style.backgroundColor = "red";
+				page[i].getElementsByTagName("a")[0].style.color = "white";
+				page[i].getElementsByTagName("a")[0].style.borderColor = "red";
+			}
+		}
+
+		var status;
+
+		var auniqs = [];
+		//var index = itemsArr.indexOf();
+		//itemsArr.splice(index, 1);
+
+		for(let i = 0; i < itemCheck.length; i += 1) {
+			itemCheck[i].onclick = function(e) {
+				selectItem(i, e);
+			}
+		}
+		for(let i = 0; i < item.length; i += 1) {
+			item[i].addEventListener('click', function(e) {
+				//alert(i);
+				//console.log(uniqId[i]);
+				var uniq = +uniqId[i].innerHTML;
+				var index = itemsArr.indexOf(uniq);
+				//console.log("index:"+index);
+
+				if(index > -1) {
+					itemsArr.splice(index, 1);
+					auniqs.splice(index, 1);
+				}else {
+					itemsArr.push(+uniq);
+					auniqs.push(+uniq);
+				}
+
+				for(var o = 0; o < itemsArr.length; o += 1) {
+					for(var p = 0; p < item.length; p += 1) {
+						if(+uniqId[p].innerHTML === +itemsArr[o]) {
+							status = item[p].querySelector(".item-status").getAttribute("stts");
+							if(status == 0) break;
+						}
+					}
+				}
+				//status = item[i].querySelector(".item-status").getAttribute("stts");
+				hide.setAttribute("stts", status);
+				if(status == 0) {
+					hide.innerHTML = "<button>Показать</button>";
+				}else {
+					hide.innerHTML = "<button>Скрыть</button>";
+				}
+
+				cancel.innerHTML = "<button>Отменить ("+ itemsArr.length +")</button>"
+				//console.log(adminPanelButtons);
+				hideMenu();
+
+				console.log(itemsArr);
+				selectItem(i, e);
+			});
+		}
+
+		function hideMenu() {
+			if(itemsArr.length > 0) {
+				adminPanelButtons[0].style.display = "none";
+				for(var n = 1; n < adminPanelButtons.length; n += 1) {
+					adminPanelButtons[n].style.display = "inline-block";
+				}
+			}else {
+				for(var n = 0; n < adminPanelButtons.length; n += 1) {
+					adminPanelButtons[n].removeAttribute("style");
+				}
+				adminPanelButtons[0].style.display = "block";
+			}
+
+			if(itemsArr.length > 1) {
+				edit.removeAttribute("style");
+			}
+		}
+
+		cancel.addEventListener("click", function() {
+			itemsArr = [];
+			auniqs = [];
+			for(var i = 0; i < item.length; i += 1) {
+				itemCheck
+				[i].checked = false;
+				item[i].removeAttribute("style");
+			}
+			for(var n = 0; n < adminPanelButtons.length; n += 1) {
+				adminPanelButtons[n].removeAttribute("style");
+			}
+			adminPanelButtons[0].style.display = "block";
+			console.log(itemsArr);
+		});
+		del.addEventListener("click", function() {
+			//var auniqs = ['1','2','3'];
+			//var url = window.location.href;
+			//window.location.href = `/admin/del/?uniq=${auniqs}&url=${url}`;
+			var confirmDelete = true;
+			if(+dataConf.cancelDelete === 1) {
+				 confirmDelete = confirm("Вы уверены, что хотите удалить?");
+			}
+
+			if(confirmDelete) {
+				var xhr = new XMLHttpRequest();
+				xhr.open('GET', `/admin/del/?uniq=${auniqs}`);
+				xhr.onload = function() {
+				    if (xhr.status === 200) {
+				    	for(var i = 0; i < item.length; i += 1) {
+				    		for(var i1 = 0; i1 < auniqs.length; i1 += 1) {
+				    			if(+auniqs[i1] === +uniqId[i].innerHTML) {
+				    				item[i].parentElement.removeChild(item[i]);
+				    				var index = itemsArr.indexOf(+auniqs[i1]);
+									itemsArr.splice(index, 1);
+				    			}
+				    		}
+				    	}
+				    	hideMenu();
+				    	auniqs = [];
+				    }else {
+				    	alert("Error 111");
+				    }
+				};
+				xhr.send();
+			}
+		});
+
+		hide.addEventListener("click", function() {
+			var status = hide.getAttribute("stts");
+
+			var xhr = new XMLHttpRequest();
+					xhr.open('GET', `/admin/show/?uniq=${auniqs}&status=${status}`);
+					xhr.onload = function() {
+					    if (xhr.status === 200) {
+
+					    	//item-status span change text & removeClass
+					    	//admin-item ul removeClass
+					    	for(var i = 0; i < item.length; i += 1) {
+					    		var ul = item[i].getElementsByTagName("ul");
+					    		var itemStatus = item[i].querySelector(".item-status");
+
+					    		for(var i1 = 0; i1 < auniqs.length; i1 += 1) {
+					    			if(+auniqs[i1] === +uniqId[i].innerHTML) {
+					    				if(+status === 0) {
+					    					ul[0].removeAttribute("class");
+					    					itemStatus.getElementsByTagName("span")[0].innerHTML = "Активный";
+					    					itemStatus.getElementsByTagName("span")[0].removeAttribute("class");
+					    					itemStatus.setAttribute("stts", "1");
+					    					hide.setAttribute("stts", "1");
+					    				}else {
+					    					ul[0].setAttribute("class","hidden");
+					    					itemStatus.getElementsByTagName("span")[0].innerHTML = "Скрытый";
+					    					itemStatus.getElementsByTagName("span")[0].setAttribute("class","hidden");
+					    					itemStatus.setAttribute("stts", "0");
+					    					hide.setAttribute("stts", "0");
+					    				}
+					    				/*item[i].removeAttribute("style");
+					    				(function(i) {
+					    					selectItem(i);
+					    				})(i);*/
+					    			}
+					    		}
+					    	}
+
+					    	//hide.setAttribute("stts", status);
+							if(status == 1) {
+								hide.innerHTML = "<button>Показать</button>";
+							}else {
+								hide.innerHTML = "<button>Скрыть</button>";
+							}
+
+					    	//auniqs = [];
+					    	//itemsArr = [];
+					    	//hideMenu();
+
+					    }else {
+					    	alert("Error 111");
+					    }
+					};
+					xhr.send();
+		});
+
+		edit.addEventListener("click", function() {
+			window.location.href = "/admin/edit/" + auniqs[0];
+		});
+
+		function selectItem(i, event) {
+			if(itemCheck[i].checked) {
+				itemCheck[i].checked = false;
+				item[i].removeAttribute("style");
+			}else {
+				itemCheck[i].checked = true;
+				item[i].style.backgroundColor = "lightslategray";
+			}
+			if(event)
+			event.stopPropagation();
+		}
+
+		var home = document.getElementById("home-add");
+		home.addEventListener("click", function() {
+			window.location.href = "/admin/add";
+		});
+	})();
+</script>

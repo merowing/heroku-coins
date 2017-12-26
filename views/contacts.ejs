@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title><%=title%></title>
+	<link rel="stylesheet" type="text/css" href="/css/styles.css" />
+</head>
+<body>
+		<div class="wrapper">
+			<div id="top">
+				<% include partials/top.ejs %>
+			</div>
+			<div id="content">
+				<div id="left">
+					<div id="coins-menu" class="left-menu-wrap">
+						<ul>
+							<li class="main-category"><a href="/category/all">Все монеты</a></li>
+							<% if(typeof(categories) !== 'undefined')%>
+							<% for(var i = 0; i < categories.length; i += 1) { %>
+								<li><a href="/category/<%=categories[i].id%>"><%=categories[i].name%></a></li>
+							<% } %>
+						</ul>
+					</div>
+				</div>
+				<div id="right">
+					<p>Контактная информация</p>
+				</div>
+			</div>	
+		</div>
+		
+		<div id="background"></div>
+		<div id="login-block"></div>
+
+		<script>
+			var menu = document.getElementById("coins-menu");
+			var ul = menu.getElementsByTagName("ul");
+
+			window.onscroll = function() {
+				//console.log(window.scrollY);
+
+				if(window.scrollY >= 160) {
+					ul[0].setAttribute("class", "scroll");
+				}else {
+					ul[0].removeAttribute("class");
+				}
+			}
+
+			var login = document.getElementById("login");
+			var loginBlock = document.getElementById("login-block");
+			var bg = document.getElementById("background");
+
+			//console.log(window.location.href.split("/"));
+			var page = window.location.href.split("/");
+			var pageBlock = document.getElementById("pages");
+			var pageLi = pageBlock.querySelectorAll("li");
+
+			var currentPage = page[page.length-1];
+			for(var i = 0; i < pageLi.length; i += 1) {
+				if(currentPage === "" || currentPage === "all" || +currentPage === 1) {
+					pageLi[0].setAttribute("class", "active");
+					pageLi[0].innerHTML = 1;
+				}else {
+					pageLi[currentPage-1].setAttribute("class", "active");
+					pageLi[currentPage-1].innerHTML = currentPage;
+				}
+			}
+
+			/*login.onclick = function() {
+				bg.style.display = "block";
+				document.body.style.overflow = "hidden";
+			}*/
+		</script>
+
+</body>
+</html>

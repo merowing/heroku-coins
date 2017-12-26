@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title><%=title%></title>
+	<style>
+		html, body {
+			margin:0;
+		}
+		div#block {
+			
+			left:200px;
+			top:30%;
+			position: absolute;
+		}
+		form {
+			width:200px;
+			display: inline-block;
+		}
+		div#error {
+			color:red;
+			font-size:20px;
+			margin:0 30px;
+			display: inline-block;
+		}
+		input {
+			width:100%;
+			height:40px;
+			box-sizing: border-box;
+			font:20px normal Georgia;
+			padding: 0 4px;
+			outline: none;
+			margin-bottom: 20px;
+		}
+		button {
+			float:right;
+			border:0;
+			background-color: whitesmoke;
+			padding: 0 18px;
+			height: 40px;
+			font:18px normal Consolas;
+		}
+		button:hover {
+			cursor: pointer;
+			background-color: lightgray;
+		}
+	</style>
+</head>
+<body>
+	<div id="block">
+		<form action="/login" method="post">
+			<label for="name">Имя</label>
+			<input name="user" id="name" type="text">
+			<label for="pass">Пароль</label>
+			<input name="pass" id="pass" type="password">
+			<input type="submit" value="Вход">
+		</form>
+		<% if(typeof(error) !== 'undefined') {%>
+			<div id="error"><%=error%></div>
+		<% } %>
+	</div>
+	<script>
+		(function() {
+			var send = document.querySelector("input[type=submit]");
+			var error = document.getElementById("error");
+
+			var name = document.getElementById("name");
+			name.value = window.localStorage.getItem("Name");
+			send.onclick = function() {
+				error.innerHTML = "";
+				window.localStorage.setItem("Name", name.value);
+			}
+		})();
+	</script>
+</body>
+</html>

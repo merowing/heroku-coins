@@ -1,0 +1,72 @@
+<% if(typeof(coins) !== "undefined") { %>
+<% if(coins.length > 0) { %>
+<% for(var i = 0; i < coins.length; i += 1) {%>
+<% var arr = ["₽", "$", "€"]; var num = coins[i].money_type;%>
+<% var image; if(coins[i].image !== null && coins[i].image !== "") image = (coins[i].image).split(",")[0]; else image = coins[i].image; %>
+<% var coinName = coins[i].name; if(coins[i].name.length > 21) coinName = coins[i].name.substr(0, 21) + "...";%>
+	<div>
+		<div class="imageBlock"><img src="/images/thumbs/<%=image%>"></div>
+		<div class="item-info">
+			<div class="name"><%=coinName%></div>
+			<div class="year"><%=coins[i].year%></div>
+		</div>
+		<div class="price-info">
+			<ul class="price">
+			<% if(!+coins[i].contract) { %>
+				<li class="val"><%=arr[num-1]%></li>
+				<li><%=coins[i].price%></li>
+			<%}else {%>
+			<li>Договорная</li>
+			<%}%>
+			</ul>
+		</div>
+
+		<div class="buy"><span>Подробнее</span></div>
+		<!--<a href="coin/<%=coins[i].uniqId%>"></a>-->
+		<a href="#<%=coins[i].uniqId%>"></a>
+	</div>
+<% }}else { %>
+<p>Все монеты куда-то убежали</p>
+<% }} %>
+<!--
+<div>
+	<img src="/images/buy-gold-coins.jpg">
+	<div class="item-info">
+		<div class="name">Название монеты</div>
+		<div class="year">2000 гг.</div>
+	</div>
+	<div class="price-info">
+		<ul class="price">
+			<li class="val">₽</li>
+			<li class="old-price">555</li>
+			<li class="new-price">411</li>
+		</ul>
+	</div>
+
+	<div class="buy"><span>Купить</span></div>
+	<a href="coin/345235"></a>
+</div>
+<div>
+	<img src="/images/479737160_1_644x461_pol-dollara-kennedi-1964-g-serebro-900-y-proby-kiev.jpg">
+	<div class="item-info">
+		<div class="name">Пол доллара Кеннеди</div>
+		<div class="year">2000 гг.</div>
+	</div>
+	<div class="price-info">
+		<ul class="price">
+			<li class="val">₽</li>
+			<li>1555</li>
+		</ul>
+	</div>
+
+	<div class="buy"><span>Купить</span></div>
+</div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+-->
